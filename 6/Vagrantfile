@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+# Образ виртуальной машины с Vagrant Cloud
+config.vm.box = "bento/ubuntu-18.04"
+# Настройки виртуальной машины и выбор провайдера
+config.vm.provider "virtualbox" do |vb|
+vb.name = "VagrantUB1804"
+# Отключаем интерфейс, он не понадобится
+vb.gui = false
+# 2 Гб оперативной памяти
+vb.memory = "8192"
+# Двухядерный процессор
+vb.cpus = 6
+end
+config.vm.hostname = "VagrantUB1804"
+# Команда для настройки сети
+config.vm.network "private_network", ip: "192.168.10.110"
+# Команда копирующая файл с хостовой машины на виртуальную
+config.scp.extra_opts = ["-i", "/home/kirikaru/.ssh/id_rsa.pub"]
+config.scp.files = {
+    "/home/kirikaru/vargan/test.txt" => "/home/vargant/test.txt"
+  }
+# Команда, которая выполнится после создания машины
+config.vm.provision "shell", path: "provision.sh"
+end
